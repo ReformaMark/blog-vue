@@ -7,3 +7,13 @@ export const passwordRules = [
   (v) => !!v || "Password is required",
   (v) => v.length >= 6 || "Password must be at least 6 characters",
 ];
+
+export const nameRules = [
+  (v) => !!v || "Name is required",
+  (v) => v.length >= 2 || "Name must be at least 2 characters",
+];
+
+export const confirmPasswordRules = (password) => [
+  (v) => !!v || "Confirm Password is required",
+  (v) => v === password || "Passwords do not match",
+];

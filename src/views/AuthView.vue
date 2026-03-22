@@ -3,7 +3,6 @@
     <v-row class="fill-height no-gutters">
       <v-col cols="12" md="6" class="d-flex align-center justify-center">
         <v-card flat class="pa-6 text-center">
-          <!-- Logo -->
           <v-img
             src="@/assets/ingco-logo.png"
             alt="INGCOPH Logo"
@@ -11,11 +10,7 @@
             max-width="250"
             class="mx-auto rounded-lg"
           ></v-img>
-
-          <!-- Heading -->
           <h1 class="mt-6 font-weight-bold text-h4">Welcome to INGCOPH</h1>
-
-          <!-- Subtitle -->
           <p class="mt-2 text-subtitle-1 text--secondary">
             #1 Power Tools Seller in the Philippines
           </p>

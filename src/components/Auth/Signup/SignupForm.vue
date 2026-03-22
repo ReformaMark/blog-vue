@@ -1,44 +1,74 @@
 <template>
-  <v-form ref="signupForm" @submit.prevent="handleSignup">
-    <v-text-field
-      v-model="name"
-      label="Name"
-      required
-      :rules="nameRules"
-    ></v-text-field>
+  <v-card class="pa-6 mx-auto" max-width="500" min-width="500">
+    <v-form ref="signupForm" @submit.prevent="handleSignup">
+      <v-card-title class="text-h5">Sign up</v-card-title>
+      <v-card-text>
+        <v-text-field
+          v-model="name"
+          label="Name"
+          required
+          :rules="nameRules"
+          outlined
+          dense
+        ></v-text-field>
 
-    <v-text-field
-      v-model="email"
-      label="Email"
-      type="email"
-      required
-      :rules="emailRules"
-    ></v-text-field>
+        <v-text-field
+          v-model="email"
+          label="Email"
+          type="email"
+          required
+          :rules="emailRules"
+          outlined
+          dense
+        ></v-text-field>
 
-    <v-text-field
-      v-model="password"
-      label="Password"
-      type="password"
-      required
-      :rules="passwordRules"
-    ></v-text-field>
+        <v-text-field
+          v-model="password"
+          label="Password"
+          type="password"
+          required
+          :rules="passwordRules"
+          outlined
+          dense
+        ></v-text-field>
 
-    <v-text-field
-      v-model="confirmPassword"
-      label="Confirm Password"
-      type="password"
-      required
-      :rules="confirmPasswordRules"
-    ></v-text-field>
-
-    <v-btn type="submit" color="primary" :loading="loading"> Sign Up </v-btn>
-    <v-btn @click="$emit('switch-to-signin')" variant="text"
-      >Already have an account? Sign In</v-btn
-    >
-  </v-form>
+        <v-text-field
+          v-model="confirmPassword"
+          label="Confirm Password"
+          type="password"
+          required
+          :rules="passwordConfirmedRules"
+          outlined
+          dense
+        ></v-text-field>
+        <v-card-actions class="">
+          <v-btn
+            type="submit"
+            color="primary"
+            :loading="loading"
+            class=""
+            block
+          >
+            Sign Up
+          </v-btn>
+        </v-card-actions>
+      </v-card-text>
+    </v-form>
+    <p class="mt-auto text-center">
+      Already have an account?
+      <v-btn @click="$emit('switch-to-signin')" text> Sign In</v-btn>
+    </p>
+  </v-card>
 </template>
 
 <script>
+import {
+  confirmPasswordRules,
+  emailRules,
+  nameRules,
+  passwordRules,
+} from "@/composables/useValidation";
+
 export default {
   name: "SignupForm",
   data() {
@@ -48,23 +78,16 @@ export default {
       password: "",
       confirmPassword: "",
       loading: false,
-      nameRules: [
-        (v) => !!v || "Name is required",
-        (v) => v.length >= 2 || "Name must be at least 2 characters",
-      ],
-      emailRules: [
-        (v) => !!v || "Email is required",
-        (v) => /.+@.+\..+/.test(v) || "Email must be valid",
-      ],
-      passwordRules: [
-        (v) => !!v || "Password is required",
-        (v) => v.length >= 6 || "Password must be at least 6 characters",
-      ],
-      confirmPasswordRules: [
-        (v) => !!v || "Confirm Password is required",
-        (v) => v === this.password || "Passwords do not match",
-      ],
+      nameRules,
+      passwordRules,
+
+      emailRules,
     };
+  },
+  computed: {
+    passwordConfirmedRules() {
+      return confirmPasswordRules(this.password);
+    },
   },
   methods: {
     async handleSignup() {
