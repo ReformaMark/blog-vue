@@ -1,7 +1,11 @@
 <template>
   <div class="d-flex justify-center align-items-center" style="height: 100vh">
     <v-row class="fill-height no-gutters">
-      <v-col cols="12" md="6" class="d-flex align-center justify-center">
+      <v-col
+        cols="12"
+        md="6"
+        class="d-none d-md-flex align-center justify-center"
+      >
         <v-card flat class="pa-6 text-center">
           <v-img
             src="@/assets/ingco-logo.png"
@@ -19,9 +23,16 @@
       <v-col
         cols="12"
         md="6"
-        class="d-flex align-center justify-center primary"
+        class="d-flex align-center justify-center primary px-6"
       >
-        <v-card flat class="" max-width="500" min-width="500">
+        <v-card flat class="form-container">
+          <v-img
+            src="@/assets/ingco-logo.png"
+            alt="INGCOPH Logo"
+            contain
+            max-width="100"
+            class="d-block d-md-none mx-auto rounded-lg"
+          ></v-img>
           <SigninForm
             v-if="step === 'signin'"
             @switch-to-signup="step = 'signup'"
@@ -34,8 +45,8 @@
 </template>
 
 <script>
-import SigninForm from "@/components/Auth/Signin/SigninForm.vue";
-import SignupForm from "@/components/Auth/Signup/SignupForm.vue";
+import SigninForm from "@/components/Auth/SigninForm.vue";
+import SignupForm from "@/components/Auth/SignupForm.vue";
 
 export default {
   name: "AuthView",
@@ -55,5 +66,16 @@ export default {
 .container-logo {
   min-width: 100vh;
   background-color: black;
+}
+
+.form-container {
+  /* width: 400px; */
+  padding: 12px;
+  max-width: 90%;
+}
+@media (min-width: 1264px) {
+  .form-container {
+    min-width: 500px;
+  }
 }
 </style>

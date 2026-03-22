@@ -1,5 +1,5 @@
 <template>
-  <v-card class="pa-6 mx-auto" max-width="500" min-width="500">
+  <div>
     <v-form ref="signupForm" @submit.prevent="handleSignup">
       <v-card-title class="text-h5">Sign up</v-card-title>
       <v-card-text>
@@ -58,7 +58,7 @@
       Already have an account?
       <v-btn @click="$emit('switch-to-signin')" text> Sign In</v-btn>
     </p>
-  </v-card>
+  </div>
 </template>
 
 <script>
@@ -116,3 +116,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.form-container {
+  min-width: 500px;
+  max-width: 90%;
+}
+</style>
