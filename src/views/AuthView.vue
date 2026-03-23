@@ -1,12 +1,12 @@
 <template>
   <div class="d-flex justify-center align-items-center" style="height: 100vh">
-    <v-row class="fill-height no-gutters">
+    <v-row class="fill-height no-gutters ">
       <v-col
         cols="12"
         md="6"
         class="d-none d-md-flex align-center justify-center"
       >
-        <v-card flat class="pa-6 text-center">
+        <v-card flat class="pa-6 text-center logo-container">
           <v-img
             src="@/assets/ingco-logo.png"
             alt="INGCOPH Logo"
@@ -72,6 +72,9 @@ export default {
   /* width: 400px; */
   padding: 12px;
   max-width: 90%;
+}
+.logo-container {
+  background-color: transparent;
 }
 @media (min-width: 1264px) {
   .form-container {

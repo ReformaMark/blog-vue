@@ -43,6 +43,7 @@
 
 <script>
 import { emailRules, passwordRules } from "@/composables/useValidation";
+import { mapActions } from "vuex";
 
 export default {
   name: "SigninForm",
@@ -56,17 +57,22 @@ export default {
     };
   },
   methods: {
-    async handleSignin() {
+    ...mapActions('user', ['login']),
+   async handleSignin() {
       if (this.$refs.signinForm.validate()) {
         this.loading = true;
         try {
-          // Perform signin logic here, e.g., API call
-          console.log("Signing in with:", {
+          const payload = {
             email: this.email,
             password: this.password,
-          });
-          // Emit event or handle response
-          this.$emit("signin", { email: this.email, password: this.password });
+          }
+
+          // Perform signin logic here, e.g., API call
+          console.log("Signing in with:", payload);
+
+          const result = await this.login(payload)
+          console.log("Login success:", result)
+          this.$router.push('/')
         } catch (error) {
           console.error("Signin error:", error);
         } finally {
