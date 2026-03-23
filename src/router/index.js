@@ -46,16 +46,17 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   const authPages = ['/auth']
   const user_token = JSON.parse(localStorage.getItem('user-token')) 
+  const isAuthenticated = user_token != null;
   // console.log(user)
 
   // Protect routes that require auth
-  if (to.meta.requiresAuth && !user_token) {
+  if (to.meta.requiresAuth && !isAuthenticated) {
     return next('/auth')
   }
 
   // Prevent logged-in users from visiting signin/signup
-  if (authPages.includes(to.path) && user_token) {
-    return next('/about')
+  if (authPages.includes(to.path) && isAuthenticated) {
+    return next('/')
   }
 
   return next()

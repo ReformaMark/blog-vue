@@ -58,13 +58,12 @@ const userModule = {
         throw error
       }
     },
-    async logout({ state, commit }) {
+    async logout({ commit }) {
       try {
-        await api.post('/api/logout', {}, {
-          headers: { Authorization: `Bearer ${state.token}` }
-        })
+        await api.post('/logout')
         commit('SET_ERROR', null)
         commit('CLEAR_USER')
+        console.log("reached")
       } catch (error) {
         commit('SET_ERROR', error.response?.data?.message || 'Something went wrong!')
         throw error

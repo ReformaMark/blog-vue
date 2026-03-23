@@ -27,7 +27,7 @@
         text
         class="blue"
         type="submit"
-        @click="logout"
+        @click="logoutUser"
     >
         <span class="mr-2">Logout</span>
     </v-btn>
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 export default {
     name: 'NavigationBar',
 
@@ -52,8 +52,9 @@ export default {
     },
     methods: {
         ...mapMutations('user', ['SET_USER', 'CLEAR_USER']),
-       logout() {
-            this.$store.commit('user/CLEAR_USER')
+        ...mapActions('user', ['logout']),
+       logoutUser() {
+            this.logout()
             this.$router.push('/auth')  
        }
     }
