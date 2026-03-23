@@ -80,7 +80,6 @@ const userModule = {
         await api.post("/logout");
         commit("SET_ERROR", null);
         commit("CLEAR_USER");
-        console.log("reached");
       } catch (error) {
         commit(
           "SET_ERROR",

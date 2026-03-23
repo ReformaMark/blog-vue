@@ -119,6 +119,7 @@ export default {
             name: this.name,
             email: this.email,
             password: this.password,
+            password_confirmation: this.confirmPassword,
           };
           // Emit event or handle response
           await this.register(payload);
@@ -126,6 +127,7 @@ export default {
           console.error("Signup error:", error);
         } finally {
           this.loading = false;
+          this.$router.push("/");
         }
       }
     },
