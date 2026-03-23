@@ -25,6 +25,9 @@ const userModule = {
     SET_ERROR(state, error) {
       state.error = error;
     },
+    CLEAR_ERROR(state) {
+      state.error = null;
+    },
   },
   getters: {
     getUser: (state) => state.user,

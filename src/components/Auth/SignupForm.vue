@@ -3,7 +3,7 @@
     <v-form ref="signupForm" @submit.prevent="handleSignup">
       <v-card-title class="text-h5">Sign up</v-card-title>
       <v-container v-if="error" max-width="400">
-        <v-banner color="red lighten-5" dense class="mb-4">
+        <v-banner color="red lighten-5" dense>
           <v-row align="center" no-gutters>
             <v-col cols="auto" class="mr-2">
               <v-icon color="red">mdi-alert-circle</v-icon>
@@ -73,7 +73,7 @@
     </v-form>
     <p class="mt-auto text-center">
       Already have an account?
-      <v-btn @click="$emit('switch-to-signin')" text> Sign In</v-btn>
+      <v-btn @click="handleSwitchToSignup" text> Sign In</v-btn>
     </p>
   </div>
 </template>
@@ -85,7 +85,7 @@ import {
   nameRules,
   passwordRules,
 } from "@/composables/useValidation";
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 
 export default {
   name: "SignupForm",
@@ -109,9 +109,11 @@ export default {
   },
   methods: {
     ...mapActions("user", ["register"]),
+    ...mapMutations("user", ["CLEAR_ERROR"]),
     async handleSignup() {
       if (this.$refs.signupForm.validate()) {
         this.loading = true;
+        this.clearErrorMessage();
         try {
           const payload = {
             name: this.name,
@@ -126,6 +128,13 @@ export default {
           this.loading = false;
         }
       }
+    },
+    clearErrorMessage() {
+      this.CLEAR_ERROR();
+    },
+    handleSwitchToSignup() {
+      this.clearErrorMessage();
+      this.$emit("switch-to-signin");
     },
   },
 };

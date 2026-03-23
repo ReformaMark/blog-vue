@@ -1,6 +1,21 @@
 <template>
   <v-form ref="signinForm" @submit.prevent="handleSignin">
     <v-card-title class="text-h5">Sign In</v-card-title>
+    <v-container v-if="error" max-width="400">
+      <v-banner color="red lighten-5" class="">
+        <v-row align="center" no-gutters>
+          <v-col cols="auto" class="mr-2">
+            <v-icon color="red">mdi-alert-circle</v-icon>
+          </v-col>
+
+          <v-col>
+            <span class="red--text">
+              {{ error }}
+            </span>
+          </v-col>
+        </v-row>
+      </v-banner>
+    </v-container>
     <v-card-text>
       <v-text-field
         v-model="email"
@@ -35,7 +50,7 @@
       </v-btn>
       <p class="mt-2 text-sm-label-small">
         Don't have an account?
-        <v-btn @click="$emit('switch-to-signup')" text> Sign Up </v-btn>
+        <v-btn @click="handleSwitchToSignup" text> Sign Up </v-btn>
       </p>
     </v-card-actions>
   </v-form>
@@ -43,7 +58,7 @@
 
 <script>
 import { emailRules, passwordRules } from "@/composables/useValidation";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 
 export default {
   name: "SigninForm",
@@ -56,29 +71,41 @@ export default {
       passwordRules,
     };
   },
+  computed: {
+    ...mapGetters("user", ["error"]),
+  },
   methods: {
-    ...mapActions('user', ['login']),
-   async handleSignin() {
+    ...mapActions("user", ["login"]),
+    ...mapMutations("user", ["CLEAR_ERROR"]),
+    async handleSignin() {
       if (this.$refs.signinForm.validate()) {
         this.loading = true;
+        this.clearErrorMessage();
         try {
           const payload = {
             email: this.email,
             password: this.password,
-          }
+          };
 
-          // Perform signin logic here, e.g., API call
           console.log("Signing in with:", payload);
 
-          const result = await this.login(payload)
-          console.log("Login success:", result)
-          this.$router.push('/')
+          const result = await this.login(payload);
+          console.log("Login success:", result);
+          this.$router.push("/");
         } catch (error) {
           console.error("Signin error:", error);
         } finally {
           this.loading = false;
         }
       }
+    },
+
+    clearErrorMessage() {
+      this.CLEAR_ERROR();
+    },
+    handleSwitchToSignup() {
+      this.clearErrorMessage();
+      this.$emit("switch-to-signup");
     },
   },
 };
