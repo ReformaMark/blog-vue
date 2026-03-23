@@ -4,6 +4,8 @@ import HomeView from "../views/HomeView.vue";
 
 const Auth = () => import (/* webpackChunkName: "auth" */ '@/views/AuthView.vue' )
 const About = () =>  import(/* webpackChunkName: "about" */ "@/views/AboutView.vue")
+const Blogs = () =>  import(/* webpackChunkName: "blogs" */ "@/views/BlogsView.vue")
+const BlogDetails = () =>  import(/* webpackChunkName: "blogs" */ "@/views/BlogsDetailsView.vue")
 
 Vue.use(VueRouter);
 
@@ -12,6 +14,14 @@ const routes = [
     path: "/",
     name: "home",
     component: HomeView,
+     meta: {
+      requiresAuth: true,
+    }
+  },
+  {
+    path: "/blogs",
+    name: "blogs",
+    component: Blogs,
      meta: {
       requiresAuth: true,
     }
@@ -32,6 +42,14 @@ const routes = [
     meta: {
       requiresAuth: false,
       layout: 'auth'
+    }
+  },
+  {
+    path: "/blogs/:id",
+    name: "blog-details",
+    component: BlogDetails,
+    meta: {
+      requiresAuth: true,
     }
   },
 ];

@@ -1,3 +1,7 @@
+export const requiredRule = [
+    (v) => !!v || "Required",
+]
+
 export const emailRules = [
   (v) => !!v || "Email is required",
   (v) => /.+@.+\..+/.test(v) || "Email must be valid",
@@ -17,3 +21,10 @@ export const confirmPasswordRules = (password) => [
   (v) => !!v || "Confirm Password is required",
   (v) => v === password || "Passwords do not match",
 ];
+
+
+export const createBlogFormRules = [
+  (v) => !!v || "Required",
+  (v) => (v && v.length > 6) || "Content must be more than 6 characters"
+
+]
