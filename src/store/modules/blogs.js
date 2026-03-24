@@ -35,7 +35,6 @@ const blogsModule = {
   },
   actions: {
     setBlog({commit}, blog) {
-      console.log("this is in the vuex:", blog)
       commit('SET_BLOG', blog)
     },
 
@@ -51,7 +50,6 @@ const blogsModule = {
     async createBlog({commit}, inputData) {
       try{
         const response = await api.post('/blogs', inputData)
-        console.log(response.data)
         commit('ADD_BLOG', response.data?.blog)
       } catch (error) {
         console.error('Error creating blogs:', error)

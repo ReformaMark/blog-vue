@@ -3,7 +3,7 @@
         <v-card>
             <v-img
                 height="400"
-                :src="blog.image || require('@/assets/default.svg')"
+                :src="blog?.image || require('@/assets/default.svg')"
                 alt="blog image"
                 cover
             ></v-img>
@@ -14,10 +14,10 @@
                     
                     <v-avatar size="40" color="primary" class="mr-3">
                     <span class="white--text">
-                        {{ blog.user?.name?.charAt(0).toUpperCase() }}
+                        {{ blog?.user?.name?.charAt(0).toUpperCase() }}
                     </span>
                     </v-avatar>
-                    {{ blog.user?.name }}
+                    {{ blog?.user?.name }}
                     
                 </div>
                 <v-divider vertical class="mx-10">
@@ -27,7 +27,7 @@
                 <div class="d-flex align-center">
                     <v-icon class="mr-2" color="primary darken-1">mdi-calendar</v-icon>
                     <span class="grey--text text--darken-1 text-display-large text-capitalize">
-                        {{ formatDate(blog.created_at) }}
+                        {{ formatDate(blog.created_at) || "" }}
                     </span>
                 </div>
                 <v-spacer></v-spacer>
@@ -49,7 +49,7 @@
             <v-container>
                 <comment-input/>
             </v-container>
-            <comment-section/>
+            <comment-section :blogId="blog.id"/>
         </v-card>
     </v-container>
 </template>

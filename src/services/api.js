@@ -10,9 +10,6 @@ const api = axios.create({
 
 api.interceptors.request.use(config => {
   const token = localStorage.getItem('user-token')
-  console.log(process.env.VUE_APP_API_URL)
-
-
   if (token) {
     const cleanToken = token.replace(/^"|"$/g, '') // remove  the ""
     config.headers.Authorization = `Bearer ${cleanToken}`
