@@ -11,6 +11,7 @@ const blogsModule = {
       per_page: 20,
       total: 0,
     },
+    isEditing: false,
   },
   mutations: {
     SET_BLOGS (state, blogs) {
@@ -35,6 +36,10 @@ const blogsModule = {
     APPEND_BLOGS(state, blogs) {
       state.blogs = [...state.blogs, ...blogs];
     },
+
+    SET_EDITING (state, editing) {
+      state.isEditing = editing
+    }
  
   
   },
@@ -47,6 +52,9 @@ const blogsModule = {
     },
     paginationStats: (state) => {
       return state.pagination
+    },
+    editing:(state) =>  {
+      return state.isEditing
     }
   },
   actions: {
@@ -140,6 +148,10 @@ const blogsModule = {
         console.log(error)
         throw error
       }
+    },
+
+    setEditing({commit}, editing) {
+      commit('SET_EDITING', editing)
     }
   }
 }

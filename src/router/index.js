@@ -6,7 +6,7 @@ const Auth = () => import (/* webpackChunkName: "auth" */ '@/views/AuthView.vue'
 const About = () =>  import(/* webpackChunkName: "about" */ "@/views/AboutView.vue")
 const Blogs = () =>  import(/* webpackChunkName: "blogs" */ "@/views/BlogsView.vue")
 const BlogDetails = () =>  import(/* webpackChunkName: "blogs" */ "@/views/BlogsDetailsView.vue")
-const BlogDetailsEdit = () =>  import(/* webpackChunkName: "blogs" */ "@/views/BlogDetailsEditView.vue")
+// const BlogDetailsEdit = () =>  import(/* webpackChunkName: "blogs" */ "@/views/BlogDetailsEditView.vue")
 
 Vue.use(VueRouter);
 
@@ -53,14 +53,14 @@ const routes = [
       requiresAuth: true,
     }
   },
-  {
-    path: "/blogs/:id/edit",
-    name: "blog-details-edit",
-    component: BlogDetailsEdit,
-    meta: {
-      requiresAuth: true,
-    }
-  },
+  // {
+  //   path: "/blogs/:id/edit",
+  //   name: "blog-details-edit",
+  //   component: BlogDetailsEdit,
+  //   meta: {
+  //     requiresAuth: true,
+  //   }
+  // },
 ];
 
 const router = new VueRouter({

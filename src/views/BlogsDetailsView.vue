@@ -1,5 +1,28 @@
 <template>
     <v-container>
+        <v-banner
+            v-if="editing"
+            color="amber lighten-4"
+            elevation="2"
+            class="mb-4"
+        >
+            <template v-slot:prepend>
+                <v-icon color="amber darken-2">mdi-pencil</v-icon>
+            </template>
+
+            <div class="text-h6 font-weight-bold">
+                Edit Mode
+            </div>
+
+            <template v-slot:actions>
+                <v-btn text color="grey darken-1" @click="cancelEdit">
+                Cancel
+                </v-btn>
+                <v-btn color="primary" @click="saveEdit">
+                Save
+                </v-btn>
+            </template>
+        </v-banner>
         <v-card>
             <v-img
                 height="400"
@@ -51,6 +74,16 @@
             <comment-section :blogId="blog.id"/>
         </v-card>
     </v-container>
+    <!-- 
+     TODOS:
+     Image:
+     -Hover effect on Image. When clicked editing the image.
+     -If the current user is the owner then show the effect(hover)
+     Title:
+     -when
+     NOTE: 
+     When submitting supply all fields needed
+     -->
 </template>
 
 <script>
@@ -62,7 +95,7 @@ import CommentSection from '@/components/Blogs/CommentSection.vue';
 export default {
     name: "BlogsDetailsView",
     computed: {
-        ...mapGetters('blogs', ['blog']),
+        ...mapGetters('blogs', ['blog','editing']),
         ...mapGetters('user', ['getUser']),
     },
     mounted () {
@@ -71,7 +104,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions('blogs', ['fetchBlog']),
+        ...mapActions('blogs', ['fetchBlog', 'setEditing']),
         formatDate(date) {
             return dayjs(date).fromNow()
         },
@@ -79,7 +112,13 @@ export default {
             console.log(userId === this.getUser.id)
             if(userId === this.getUser.id) return true;
             return false;
-        }   
+        },
+        cancelEdit () {
+            this.setEditing(false)
+        },
+        saveEdit () {
+            this.setEditing(true)
+        }
     },
     components: {
         BlogActionMenu,

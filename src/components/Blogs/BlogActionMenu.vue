@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex';
 import DeleteBlogDialog from './DeleteBlogDialog.vue'
 
 export default {
@@ -45,12 +46,19 @@ export default {
     showMenu: false,
     showDeleteDialog: false
   }),
+  computed: {
+    ...mapState('blogs',['isEditing']),
+    editing () {
+      return this.isEditing
+    }
+  },
   components: { DeleteBlogDialog },
   methods: {
+    ...mapActions('blogs', ['setEditingToTrue']),
     handleMenuClick(action) {
       this.showMenu = false
       if (action === 'edit') {
-        this.$router.push(`/blogs/${this.blog.id}/edit`)
+        this.setEditingToTrue(true)
       }
     }
   }
