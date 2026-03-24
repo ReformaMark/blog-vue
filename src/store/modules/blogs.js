@@ -130,7 +130,16 @@ const blogsModule = {
         
         });
       }
-  
+    },
+    async fetchBlog({commit},blogId) {
+      try {
+        const res = await api.get(`/blogs/${blogId}`)
+        const blog = res.data
+        commit('SET_BLOG', blog)
+      } catch (error) {
+        console.log(error)
+        throw error
+      }
     }
   }
 }

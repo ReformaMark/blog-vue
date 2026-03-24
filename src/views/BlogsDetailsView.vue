@@ -11,7 +11,6 @@
         <div class="">
             <v-card-actions class="">
                 <div class="">
-                    
                     <v-avatar size="40" color="primary" class="mr-3">
                     <span class="white--text">
                         {{ blog?.user?.name?.charAt(0).toUpperCase() }}
@@ -55,7 +54,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import dayjs from '@/utils/dayjs'
 import BlogActionMenu from '@/components/Blogs/BlogActionMenu.vue';
 import CommentInput from '@/components/Blogs/CommentInput.vue';
@@ -68,10 +67,11 @@ export default {
     },
     mounted () {
         if(this.blog === null) {
-            this.$router.push('/blogs')
+            this.fetchBlog(this.$route.params.id)
         }
     },
     methods: {
+        ...mapActions('blogs', ['fetchBlog']),
         formatDate(date) {
             return dayjs(date).fromNow()
         },
