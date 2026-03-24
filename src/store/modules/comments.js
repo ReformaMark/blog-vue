@@ -16,15 +16,22 @@ const commentsModule = {
     SET_COMMENTS(state, comments) {
       state.comments = comments;
     },
-    APPEND_COMMENTS(state, payload) {
-      state.comments = [...state.comments, ...payload.data];
-      state.pagination.current_page = payload.current_page;
+    APPEND_COMMENTS(state, comments) {
+      state.comments = [...state.comments, ...comments];
     },
     INCREMENT_PAGE(state) {
       state.pagination.current_page++
     },
     SET_PAGINATION(state, paginationStats) {
       state.pagination = paginationStats
+    },
+    SOFT_DELETE_COMMENT(state, commentId) {
+      state.comments = state.comments.map(comment => {
+        if (comment.id === commentId) {
+          return { ...comment, deleted: true }
+        }
+        return comment
+      })
     }
   },
   getters: {
@@ -39,7 +46,7 @@ const commentsModule = {
     }
   },
   actions: {
-    async fetchComments({ commit,state }, { blogId, page = 1 }) {
+    async fetchComments({ commit, state }, { blogId, page = 1 }) {
       if (!state.pagination.last_page || page <= state.pagination.last_page) {
         const res = await api.get(`/blogs/${blogId}/comments?page=${page}`);
 
@@ -50,23 +57,48 @@ const commentsModule = {
         }
 
         const paginationStats = {
-          current_page: res.data.current_page || 1,
-          last_page: res.data.last_page || 1,
-          per_page: res.data.per_page || 20,
-          total: res.data.total || 1,
-        }
-      commit('SET_PAGINATION',paginationStats)
+          current_page: res.data.current_page,
+          last_page: res.data.last_page,
+          per_page: res.data.per_page,
+          total: res.data.total,
+        };
+        commit('SET_PAGINATION', paginationStats);
       }
-
-
     },
     async loadMoreComments({ commit, state }, blogId) {
       if (state.pagination.current_page < state.pagination.last_page) {
         const nextPage = state.pagination.current_page + 1;
         const res = await api.get(`/blogs/${blogId}/comments?page=${nextPage}`);
-        commit('APPEND_COMMENTS', res.data);
-      } else {
-        console.log("already in the last page")
+        commit('APPEND_COMMENTS', res.data.data);
+
+        const paginationStats = {
+          current_page: res.data.current_page,
+          last_page: res.data.last_page,
+          per_page: res.data.per_page,
+          total: res.data.total,
+        };
+        commit('SET_PAGINATION', paginationStats);
+      }
+    },
+    async addComment({commit, state}, payload) {
+      console.log("this is the add comment payload:", payload)
+        const res = await api.post('/comments', payload)
+        const newComment = res.data.comment;
+        if(!state.comments){
+          commit('SET_COMMENTS', [newComment]); 
+        } else {
+          if(state.comments.length < 5) {
+            commit('APPEND_COMMENTS', [newComment])
+          }
+        }
+    },
+    async deleteComment({commit}, commentId) {
+      try{
+        await api.delete(`/comments/${commentId}`)
+        commit('SOFT_DELETE_COMMENT', commentId)
+      } catch (error) {
+        console.error('Error soft delete comment:', error)
+        throw error;
       }
     },
   },

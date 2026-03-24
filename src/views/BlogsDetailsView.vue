@@ -47,7 +47,7 @@
         </div>
         <v-card>
             <v-container>
-                <comment-input/>
+                <comment-input :blogId="blog.id"/>
             </v-container>
             <comment-section :blogId="blog.id"/>
         </v-card>
