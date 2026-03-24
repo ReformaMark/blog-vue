@@ -1,14 +1,15 @@
 <template>
 <v-dialog v-model="showDialog" max-width="1000">
     <template v-slot:activator="{ on, attrs }">
-        <v-btn
-        v-on="on"
-        v-bind="attrs"
-        color="blue"
-        dark
-        >
-        Create new blogs
-        </v-btn>
+     <v-btn
+      v-on="on"
+      v-bind="attrs"
+      color="blue"
+      dark
+    >
+      <v-icon left>mdi-plus</v-icon>
+      blogs
+    </v-btn>
     </template>
 
   <template >

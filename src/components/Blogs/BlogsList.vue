@@ -2,10 +2,10 @@
   <v-container>
     <v-row justify="space-between"  >
         <v-col cols="auto">
-            <h2>Blog list</h2>
+            <h2>Blogs ({{ paginationStats.total }})</h2>
           
         </v-col>
-        <v-col cols="auto">
+        <v-col cols="auto" class="fixed-dialog">
             <create-blog-dialog/>
         </v-col>
     </v-row>
@@ -74,6 +74,26 @@
       </v-card>
       </v-col>
     </v-row>
+    <v-container class="text-center my-4">
+        <v-btn
+            v-if="hasNextPage"
+            @click="handleLoadMore"
+            color="primary"
+            outlined
+            rounded
+        >
+            <v-icon left>mdi-arrow-down</v-icon>
+            Load more blogs
+        </v-btn>
+
+        <!-- Only show "end of comments" if there are comments -->
+        <p
+            v-else-if="hasBlogs"
+            class="mt-3 text-center grey--text"
+        >
+             You&apos;ve reached the end — no more blogs to show.
+        </p>
+      </v-container>
   </v-container>
 </template>
 
@@ -89,11 +109,19 @@ export default {
       CreateBlogDialog,
     },
     computed: {
-        ...mapGetters('blogs', ['blogs']),
+        ...mapGetters('blogs', ['blogs', 'paginationStats']),
         ...mapGetters('user', ['getUser']),
+        hasBlogs () {
+            if(this.blogs.length >= 1) return true
+            return false
+        },
+        hasNextPage() {
+            if (!this.paginationStats) return false;
+            return this.paginationStats.current_page < this.paginationStats.last_page;
+        },
     },
     methods: {
-        ...mapActions('blogs', ['fetchBlogs', 'setBlog']),
+        ...mapActions('blogs', ['fetchBlogs', 'setBlog', 'loadMoreBlogs']),
         formatDate(date){
           return dayjs(date).fromNow()
         },
@@ -101,7 +129,10 @@ export default {
           this.setBlog(blog)
    
           this.$router.push({ name: 'blog-details', params: { id: blog.id } })
-        }
+        },
+        async handleLoadMore () {
+            this.loadMoreBlogs()
+        },
     },
     mounted() {
         this.fetchBlogs()
@@ -135,5 +166,10 @@ export default {
   line-height: 2.5rem;        /* allows wrapping */
   min-height: 50px
 }
-
+.fixed-dialog {
+  position: fixed;
+  bottom: 16px;   /* distance from bottom */
+  right: 16px;    /* distance from right */
+  z-index: 2000;  /* make sure it stays above other content */
+}
 </style>

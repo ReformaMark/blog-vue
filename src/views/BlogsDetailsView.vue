@@ -31,7 +31,7 @@
                     </span>
                 </div>
                 <v-spacer></v-spacer>
-                <div class="">
+                <div class="" v-if="ownedBlog(blog?.user?.id)">
                     <blog-action-menu :blog="blog" />
                 </div>
             </v-card-actions>
@@ -64,6 +64,7 @@ export default {
     name: "BlogsDetailsView",
     computed: {
         ...mapGetters('blogs', ['blog']),
+        ...mapGetters('user', ['getUser']),
     },
     mounted () {
         if(this.blog === null) {
@@ -73,7 +74,12 @@ export default {
     methods: {
         formatDate(date) {
             return dayjs(date).fromNow()
-        }
+        },
+        ownedBlog (userId) {
+            console.log(userId === this.getUser.id)
+            if(userId === this.getUser.id) return true;
+            return false;
+        }   
     },
     components: {
         BlogActionMenu,

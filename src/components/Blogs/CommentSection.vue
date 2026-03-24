@@ -103,7 +103,9 @@ export default {
             if (!this.paginationStats) return false;
             return this.paginationStats.current_page < this.paginationStats.last_page;
         },
-       
+        totalComments() {
+            return this.comments.filter(c => !c.deleted).length
+        },
     },
     methods: {
         ...mapActions('comments', ['fetchComments', 'loadMoreComments']),
@@ -115,7 +117,7 @@ export default {
         },
         ownComment(userId) {
             return userId === this.getUser.id
-        }
+        },
     },
     mounted() {
         this.fetchComments({ blogId: this.blogId});

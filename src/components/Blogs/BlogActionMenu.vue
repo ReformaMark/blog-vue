@@ -50,7 +50,7 @@ export default {
     handleMenuClick(action) {
       this.showMenu = false
       if (action === 'edit') {
-        console.log('Edit clicked')
+        this.$router.push(`/blogs/${this.blog.id}/edit`)
       }
     }
   }

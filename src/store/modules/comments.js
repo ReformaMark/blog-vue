@@ -32,7 +32,13 @@ const commentsModule = {
         }
         return comment
       })
-    }
+    },
+   DECREMENT_TOTAL (state) {
+      state.pagination.total--
+   },
+    INCREMENT_TOTAL (state) {
+      state.pagination.total++
+    } 
   },
   getters: {
     comments: (state) =>  {
@@ -69,8 +75,8 @@ const commentsModule = {
       if (state.pagination.current_page < state.pagination.last_page) {
         const nextPage = state.pagination.current_page + 1;
         const res = await api.get(`/blogs/${blogId}/comments?page=${nextPage}`);
-        commit('APPEND_COMMENTS', res.data.data);
-
+        const data = res.data.data
+        commit('APPEND_COMMENTS', data);
         const paginationStats = {
           current_page: res.data.current_page,
           last_page: res.data.last_page,
@@ -86,16 +92,19 @@ const commentsModule = {
         const newComment = res.data.comment;
         if(!state.comments){
           commit('SET_COMMENTS', [newComment]); 
+          commit('INCREMENT_TOTAL')
         } else {
           if(state.comments.length < 5) {
             commit('APPEND_COMMENTS', [newComment])
+            commit('INCREMENT_TOTAL')
           }
         }
-    },
+    },  
     async deleteComment({commit}, commentId) {
       try{
-        await api.delete(`/comments/${commentId}`)
+        const res = await api.delete(`/comments/${commentId}`)
         commit('SOFT_DELETE_COMMENT', commentId)
+        if (res.status == 200) commit('DECREMENT_TOTAL')
       } catch (error) {
         console.error('Error soft delete comment:', error)
         throw error;
