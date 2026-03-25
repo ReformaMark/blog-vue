@@ -1,6 +1,5 @@
-export const requiredRule = [
-    (v) => !!v || "Required",
-]
+export const requiredRule = (v) => !!v || "Required"
+
 
 export const emailRules = [
   (v) => !!v || "Email is required",
@@ -28,3 +27,5 @@ export const createBlogFormRules = [
   (v) => (v && v.length > 6) || "Content must be more than 6 characters"
 
 ]
+
+export const validContent = (v) => (v && v.length > 6) || "Content must be more than 6 characters"

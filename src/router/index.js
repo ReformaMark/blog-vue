@@ -4,8 +4,8 @@ import HomeView from "../views/HomeView.vue";
 
 const Auth = () => import (/* webpackChunkName: "auth" */ '@/views/AuthView.vue' )
 const About = () =>  import(/* webpackChunkName: "about" */ "@/views/AboutView.vue")
-const Blogs = () =>  import(/* webpackChunkName: "blogs" */ "@/views/BlogsView.vue")
-const BlogDetails = () =>  import(/* webpackChunkName: "blogs" */ "@/views/BlogsDetailsView.vue")
+const Blogs = () =>  import(/* webpackChunkName: "blogs" */ "@/views/blogs/BlogsView.vue")
+const BlogDetails = () =>  import(/* webpackChunkName: "blogs" */ "@/views/blogs/BlogsDetailsView.vue")
 // const BlogDetailsEdit = () =>  import(/* webpackChunkName: "blogs" */ "@/views/BlogDetailsEditView.vue")
 
 Vue.use(VueRouter);
