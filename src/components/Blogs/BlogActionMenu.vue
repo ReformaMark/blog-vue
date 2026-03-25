@@ -30,6 +30,17 @@
       v-model="showDeleteDialog"
       :blog="blog"
     />
+
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="3000"
+      :color="snackbarColor"
+      bottom
+      right
+    >
+      {{ snackbarMessage }}
+      <v-btn text @click="snackbar = false">Close</v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -44,7 +55,10 @@ export default {
   },
   data: () => ({
     showMenu: false,
-    showDeleteDialog: false
+    showDeleteDialog: false,
+    snackbar: false,
+    snackbarMessage: "",
+    snackbarColor: "success",
   }),
   computed: {
     ...mapState('blogs',['isEditing']),
@@ -54,12 +68,17 @@ export default {
   },
   components: { DeleteBlogDialog },
   methods: {
-    ...mapActions('blogs', ['setEditingToTrue']),
+    ...mapActions('blogs', ['setEditing']),
     handleMenuClick(action) {
-      this.showMenu = false
       if (action === 'edit') {
-        this.setEditingToTrue(true)
+        this.setEditing(true)
+        //show snackbar
+        this.snackbarMessage = "Editing content"
+        this.snackbarColor = "info"   // or "primary", "success", etc.
+        this.snackbar = true
+        console.log(this.snackbar)
       }
+      // this.showMenu = false
     }
   }
 }

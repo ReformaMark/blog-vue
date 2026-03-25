@@ -76,31 +76,23 @@ export default {
     },
     methods: {
         ...mapActions('blogs', ['updateBlog', 'setEditing']),
-        async handleSubmitForm () {
-            const data = {
-                blogId: this.blog.id,
-                payload: {
-                    title: this.title,
-                    content: this.content,
-                    image:  null // link url of the image
-                }
-            }
-            await this.updateBlog(data)
-            this.snackbarMessage = "Update saved successfully."
-        },
         cancelEdit () {
             this.setEditing(false)
         },
         async saveEdit () {
             const payload = {
-                title: this.title,
-                content: this.content,
-                image: null
+                blogId: this.blog.id,
+                data: {
+                    title: this.title,
+                    content: this.content,
+                    image: null
+                }
             }
             await this.updateBlog(payload)
+            this.snackbar = true
             this.snackbarMessage = "Update saved successfully."
             this.snackbarColor = "success"
-            this.snackbar = true
+  
             this.setEditing(false)
         }
     }
