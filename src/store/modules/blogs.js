@@ -61,11 +61,11 @@ const blogsModule = {
     setBlog({commit}, blog) {
       commit('SET_BLOG', blog)
     },
-
     async fetchBlogs({commit}) {
-      const page = 1
+      const page = 1;
+      const per_page = 6;
       try{
-        const response = await api.get(`/blogs?page=${page}`)
+        const response = await api.get(`/blogs?page=${page}&per_page=${per_page}`);
         if (page === 1) {
           commit('SET_BLOGS', response.data.data)
         } else {
@@ -82,7 +82,6 @@ const blogsModule = {
         console.error('Error fetching blogs:', error)
       }
     },
-
     async loadMoreBlogs({commit, state}) {
        if (state.pagination.current_page < state.pagination.last_page) {
         const nextPage = state.pagination.current_page + 1;
@@ -149,7 +148,6 @@ const blogsModule = {
         throw error
       }
     },
-
     setEditing({commit}, editing) {
       commit('SET_EDITING', editing)
     }
