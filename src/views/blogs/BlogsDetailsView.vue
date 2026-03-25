@@ -1,29 +1,6 @@
 <template>
     <v-container>
-        <!-- Editing banner -->
-        <v-banner
-            v-if="editing"
-            color="amber lighten-4"
-            elevation="2"
-            class="mb-4"
-        >
-            <template v-slot:prepend>
-                <v-icon color="amber darken-2">mdi-pencil</v-icon>
-            </template>
-
-            <div class="text-h6 font-weight-bold">
-                Edit Mode
-            </div>
-
-            <template v-slot:actions>
-                <v-btn text color="grey darken-1" @click="cancelEdit">
-                Cancel
-                </v-btn>
-                <v-btn color="primary" @click="saveEdit">
-                Save
-                </v-btn>
-            </template>
-        </v-banner>
+     
         <!-- Image -->
         <v-card>
             <v-img
@@ -52,7 +29,7 @@
                 <div class="d-flex align-center">
                     <v-icon class="mr-2" color="primary darken-1">mdi-calendar</v-icon>
                     <span class="grey--text text--darken-1 text-display-large text-capitalize">
-                        {{ formatDate(blog.created_at) || "" }}
+                        {{ formatDate(blog?.created_at) || "" }}
                     </span>
                 </div>
                 <v-spacer></v-spacer>
@@ -61,21 +38,32 @@
                 </div>
             </v-card-actions>
             <!-- Title and Content -->
-            <div v-if="editing" class="">
+            <div v-if="!editing" class="">
                 <v-card-title class="text-h2">
-                    {{ blog.title }}
+                    {{ blog?.title }}
                 </v-card-title>
-                <v-card-text >
-                    <p class="blog-content">{{ blog.content }}</p>
+                <v-card-text  >
+                    <p class="blog-content">{{ blog?.content }}</p>
                 </v-card-text>
             </div>
+            <div v-else class="">
+                <edit-blog-form/>
+            </div>
+                
+                <v-card-title class="text-h2">
+                    
+                </v-card-title>
+       
         </div>
-        <v-card>
+        <!-- Comment Section... Hidden when editing is true -->
+        <v-card v-if="!editing && blog">
             <v-container>
                 <comment-input :blogId="blog.id"/>
             </v-container>
             <comment-section :blogId="blog.id"/>
         </v-card>
+
+         
     </v-container>
     <!-- 
      TODOS:
@@ -95,6 +83,7 @@ import dayjs from '@/utils/dayjs'
 import BlogActionMenu from '@/components/Blogs/BlogActionMenu.vue';
 import CommentInput from '@/components/Blogs/CommentInput.vue';
 import CommentSection from '@/components/Blogs/CommentSection.vue';
+import EditBlogForm from '@/components/Blogs/EditBlogForm.vue';
 export default {
     name: "BlogsDetailsView",
     computed: {
@@ -107,26 +96,23 @@ export default {
         }
     },
     methods: {
-        ...mapActions('blogs', ['fetchBlog', 'setEditing']),
+        ...mapActions('blogs', ['fetchBlog', 'setEditing', 'updateBlog']),
         formatDate(date) {
             return dayjs(date).fromNow()
         },
         ownedBlog (userId) {
-            console.log(userId === this.getUser.id)
+            if(this.editing) return false
             if(userId === this.getUser.id) return true;
             return false;
         },
-        cancelEdit () {
-            this.setEditing(false)
-        },
-        saveEdit () {
-            this.setEditing(false)
-        }
+      
+   
     },
     components: {
         BlogActionMenu,
         CommentInput,
-        CommentSection
+        CommentSection,
+        EditBlogForm,
     }
 
 }
