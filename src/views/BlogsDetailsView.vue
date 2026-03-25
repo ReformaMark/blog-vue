@@ -1,5 +1,6 @@
 <template>
     <v-container>
+        <!-- Editing banner -->
         <v-banner
             v-if="editing"
             color="amber lighten-4"
@@ -23,6 +24,7 @@
                 </v-btn>
             </template>
         </v-banner>
+        <!-- Image -->
         <v-card>
             <v-img
                 height="400"
@@ -31,6 +33,7 @@
                 cover
             ></v-img>
         </v-card>
+        <!--Avatar, Name, Created, Action menu-->
         <div class="">
             <v-card-actions class="">
                 <div class="">
@@ -57,15 +60,15 @@
                     <blog-action-menu :blog="blog" />
                 </div>
             </v-card-actions>
-            <v-card-title class="text-h2">
-                {{ blog.title }}
-            </v-card-title>
-            <v-card-text >
-                <p class="blog-content">{{ blog.content }}</p>
-            </v-card-text>
-            <v-card>
-
-            </v-card>
+            <!-- Title and Content -->
+            <div v-if="editing" class="">
+                <v-card-title class="text-h2">
+                    {{ blog.title }}
+                </v-card-title>
+                <v-card-text >
+                    <p class="blog-content">{{ blog.content }}</p>
+                </v-card-text>
+            </div>
         </div>
         <v-card>
             <v-container>
@@ -98,7 +101,7 @@ export default {
         ...mapGetters('blogs', ['blog','editing']),
         ...mapGetters('user', ['getUser']),
     },
-    mounted () {
+    mounted() {
         if(this.blog === null) {
             this.fetchBlog(this.$route.params.id)
         }
@@ -117,7 +120,7 @@ export default {
             this.setEditing(false)
         },
         saveEdit () {
-            this.setEditing(true)
+            this.setEditing(false)
         }
     },
     components: {

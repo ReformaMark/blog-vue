@@ -11,6 +11,7 @@ const blogsModule = {
       per_page: 20,
       total: 0,
     },
+    per_page: 10,
     isEditing: false,
   },
   mutations: {
@@ -18,7 +19,7 @@ const blogsModule = {
       state.blogs = blogs;
     },
     ADD_BLOG (state, blog) {
-      state.blogs.push(blog)
+      state.blogs = [ blog, ...state.blogs];
     },
     REMOVE_BLOG(state, blogId) {
       state.blogs = state.blogs.filter(blog => blog.id !== blogId)
@@ -34,7 +35,7 @@ const blogsModule = {
       state.pagination = paginationStats
     },
     APPEND_BLOGS(state, blogs) {
-      state.blogs = [...state.blogs, ...blogs];
+      state.blogs = [  ...state.blogs, ...blogs];
     },
 
     SET_EDITING (state, editing) {
@@ -61,11 +62,10 @@ const blogsModule = {
     setBlog({commit}, blog) {
       commit('SET_BLOG', blog)
     },
-    async fetchBlogs({commit}) {
+    async fetchBlogs({commit, state}) {
       const page = 1;
-      const per_page = 6;
       try{
-        const response = await api.get(`/blogs?page=${page}&per_page=${per_page}`);
+        const response = await api.get(`/blogs?page=${page}&per_page=${state.per_page}`);
         if (page === 1) {
           commit('SET_BLOGS', response.data.data)
         } else {
@@ -85,7 +85,7 @@ const blogsModule = {
     async loadMoreBlogs({commit, state}) {
        if (state.pagination.current_page < state.pagination.last_page) {
         const nextPage = state.pagination.current_page + 1;
-        const res = await api.get(`/blogs?page=${nextPage}`);
+        const res = await api.get(`/blogs?page=${nextPage}&per_page=${state.per_page}`);
         commit('APPEND_BLOGS', res.data.data);
 
         const paginationStats = {
