@@ -5,9 +5,9 @@
         <v-card>
             <v-img
                 height="400"
-                :src="blog?.image || require('@/assets/default.svg')"
+                :src="previewUrl || blog?.image || require('@/assets/default.svg')"
                 alt="blog image"
-                cover
+                contain
             ></v-img>
         </v-card>
         <!--Avatar, Name, Created, Action menu-->
@@ -87,12 +87,15 @@ import EditBlogForm from '@/components/Blogs/EditBlogForm.vue';
 export default {
     name: "BlogsDetailsView",
     computed: {
-        ...mapGetters('blogs', ['blog','editing']),
+        ...mapGetters('blogs', ['blog','editing', 'previewUrl']),
         ...mapGetters('user', ['getUser']),
     },
     mounted() {
+        this.setEditing(false)
         if(this.blog === null) {
             this.fetchBlog(this.$route.params.id)
+       
+            
         }
     },
     methods: {

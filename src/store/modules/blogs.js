@@ -11,8 +11,9 @@ const blogsModule = {
       per_page: 20,
       total: 0,
     },
-    per_page: 10,
+    per_page: 12,
     isEditing: false,
+    previewUrl: null
   },
   mutations: {
     SET_BLOGS (state, blogs) {
@@ -40,6 +41,16 @@ const blogsModule = {
 
     SET_EDITING (state, editing) {
       state.isEditing = editing
+    },
+
+    UPDATE_BLOG_IMAGE (state, url) {
+      state.blog = {
+        ...state.blog,
+        image: url
+      }
+    },
+    SET_PREVIEWURL (state, url) {
+      state.previewUrl = url
     }
  
   
@@ -56,6 +67,9 @@ const blogsModule = {
     },
     editing:(state) =>  {
       return state.isEditing
+    },
+    previewUrl: (state) =>{
+      return state.previewUrl
     }
   },
   actions: {
@@ -119,6 +133,7 @@ const blogsModule = {
     async updateBlog({commit}, {blogId, data}) {
       try{
         const response = await api.put(`/blogs/${blogId}`, data )
+        console.log(response.data?.blog)
         commit('UPDATE_BLOG', response.data?.blog)
       } catch (error) {
         console.error('Error removing blogs:', error)
@@ -150,6 +165,10 @@ const blogsModule = {
     },
     setEditing({commit}, editing) {
       commit('SET_EDITING', editing)
+    },
+    setPreviewUrl({commit}, file) {
+      const url = URL.createObjectURL(file)
+      commit('SET_PREVIEWURL', url)
     }
   }
 }

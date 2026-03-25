@@ -15,14 +15,14 @@
         :key="blog.id"
         cols="12"
         sm="6"
-        md="6"
+        md="4"
       >
       <v-card elevation="2">
         <v-img
           height="250"
           :src="blog.image || require('@/assets/default.svg')"
           alt="blog image"
-          cover
+          contain
         ></v-img>
                 
         <v-card-title class="d-flex align-center">
@@ -66,7 +66,7 @@
           </div>
   
           <v-card-subtitle>
-            <v-btn @click="handleViewBlog(blog)">
+            <v-btn @click="handleViewBlog(blog)" dark>
               View Blog
             </v-btn>
           </v-card-subtitle>
