@@ -34,9 +34,11 @@
 
                     </v-card-title>
 
-                    <v-card-text>
-                    {{ comment.content }}
+                    <v-card-text v-if="!isEditing">
+                        {{ comment.content }}
                     </v-card-text>
+                    
+                    
                 </div>
                <v-alert
                     v-if="comment.deleted"
@@ -92,7 +94,7 @@ export default {
     },
     components: { CommentActionMenu },
     computed: {
-        ...mapGetters('comments', ['comments', 'paginationStats']),
+        ...mapGetters('comments', ['comments', 'paginationStats', 'isEditing' ]),
         ...mapGetters('user', ['getUser']),
 
         hasComments () {

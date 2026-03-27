@@ -12,6 +12,9 @@ const blogsModule = {
       total: 0,
     },
     per_page: 12,
+    sortBy: "created_at", 
+    itemsPerPage: 12,
+    sortDesc: false,
     isEditing: false,
     previewUrl: null
   },
@@ -42,6 +45,9 @@ const blogsModule = {
     SET_EDITING (state, editing) {
       state.isEditing = editing
     },
+    SET_PER_PAGE (state, numberOfPages) {
+      state.per_page = numberOfPages
+    },
 
     UPDATE_BLOG_IMAGE (state, url) {
       state.blog = {
@@ -70,6 +76,9 @@ const blogsModule = {
     },
     previewUrl: (state) =>{
       return state.previewUrl
+    },
+    perPage: (state) => {
+      return state.per_page
     }
   },
   actions: {
@@ -79,7 +88,7 @@ const blogsModule = {
     async fetchBlogs({commit, state}) {
       const page = 1;
       try{
-        const response = await api.get(`/blogs?page=${page}&per_page=${state.per_page}`);
+        const response = await api.get(`/blogs?page=${state.page}&per_page=${state.itemsPerPage}`);
         if (page === 1) {
           commit('SET_BLOGS', response.data.data)
         } else {

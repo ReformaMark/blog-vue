@@ -1,23 +1,36 @@
 <template>
-  <v-container>
-    <v-row justify="space-between"  >
+  <div class="px-16 pa-10"> 
+    <v-row justify="space-between" >
+       
         <v-col cols="auto">
-            <h2>Blogs ({{ paginationStats.total }})</h2>
-          
+          <v-select 
+            v-model="selectedView"
+            :items="viewOptions"
+            label="Select View"
+            dense
+            solo
+          ></v-select>
         </v-col>
-        <v-col cols="auto" class="fixed-dialog">
+        <v-col cols="auto" >
             <create-blog-dialog/>
         </v-col>
     </v-row>
-    <v-row>
+    <!-- Blog Card view list -->
+     <div v-if="selectedView === 'Card'" class="">
+       <v-col cols="auto">
+            <h2>Blogs ({{ paginationStats.total }})</h2>
+          
+        </v-col>
+      <v-row  gap="20">
       <v-col
         v-for="blog in blogs"
         :key="blog.id"
         cols="12"
-        sm="6"
-        md="4"
+        sm="12"
+        md="6"
+        class="pb-4"
       >
-      <v-card elevation="2">
+      <v-card elevation="2" class="ma-2">
         <v-img
           height="250"
           :src="blog.image || require('@/assets/default.svg')"
@@ -73,28 +86,31 @@
       </v-card-actions>
       </v-card>
       </v-col>
-    </v-row>
-    <v-container class="text-center my-4">
-        <v-btn
-            v-if="hasNextPage"
-            @click="handleLoadMore"
-            color="primary"
-            outlined
-            rounded
-        >
-            <v-icon left>mdi-arrow-down</v-icon>
-            Load more blogs
-        </v-btn>
-
-        <!-- Only show "end of comments" if there are comments -->
-        <p
-            v-else-if="hasBlogs"
-            class="mt-3 text-center grey--text"
-        >
-             You&apos;ve reached the end — no more blogs to show.
-        </p>
+      </v-row>
+      <v-container class="text-center my-4">
+          <v-btn
+              v-if="hasNextPage"
+              @click="handleLoadMore"
+              color="primary"
+              outlined
+              rounded
+          >
+              <v-icon left>mdi-arrow-down</v-icon>
+              Load more blogs
+          </v-btn>
+          <!-- Only show "end of comments" if there are comments -->
+          <p
+              v-else-if="hasBlogs"
+              class="mt-3 text-center grey--text"
+          >
+              You&apos;ve reached the end — no more blogs to show.
+          </p>
       </v-container>
-  </v-container>
+    </div>
+    <div v-else-if="selectedView === 'Table'" class="">
+      <blogs-table/>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -102,11 +118,17 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { mapActions, mapGetters } from 'vuex';
 import CreateBlogDialog from './CreateBlogDialog.vue';
+import BlogsTable from './BlogsTable.vue';
 dayjs.extend(relativeTime)
 export default {
     name: 'BlogsList',
+    data: () => ({
+      selectedView: 'Table', // must be a value inside the viewOptions ex. "Card", "Table", "List"
+      viewOptions: ["Card", "Table", "List"]
+    }),
     components: {
       CreateBlogDialog,
+      BlogsTable,
     },
     computed: {
         ...mapGetters('blogs', ['blogs', 'paginationStats']),

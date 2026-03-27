@@ -11,6 +11,7 @@ const commentsModule = {
       per_page: 20,
       total: 0,
     },
+    editingComment: false,
   },
   mutations: {
     SET_COMMENTS(state, comments) {
@@ -33,12 +34,18 @@ const commentsModule = {
         return comment
       })
     },
-   DECREMENT_TOTAL (state) {
+    DECREMENT_TOTAL (state) {
       state.pagination.total--
-   },
+    },
     INCREMENT_TOTAL (state) {
       state.pagination.total++
-    } 
+    },
+    SET_EDITINGCOMMENT (state, bool) {
+      state.editingComment = bool // true or false
+    },
+    UPDATE_COMMENTS (state, updatedcomment) {
+        state.comments = state.comments.map(comment => comment.id === updatedcomment.id ? updatedcomment : comment) // look for comment id inside the coments state and assign the updated comment values to it if exist
+    },
   },
   getters: {
     comments: (state) =>  {
@@ -49,7 +56,10 @@ const commentsModule = {
     },
     paginationStats: (state) => {
       return state.pagination
-    }
+    },
+    isEditing: (state) => {
+      return state.editingComment
+    },
   },
   actions: {
     async fetchComments({ commit, state }, { blogId, page = 1 }) {
@@ -110,6 +120,20 @@ const commentsModule = {
         throw error;
       }
     },
+    async updateComment({commit}, payload) { // blog_id and comment_id in the url then content as data = payload 
+      try {
+        const res = await api.put(`/blogs/${payload.blogId}/comments/${payload.commentId}`)
+        if(res.status == 200) {
+          commit('UPDATE_COMMENTS', res.data )
+        }
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          return "Comment Id does not exist in blog comments";
+        }
+        console.error(error);
+        return "An unexpected error occurred";
+      }
+    }
   },
 };
 
