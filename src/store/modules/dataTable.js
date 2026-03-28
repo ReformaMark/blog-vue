@@ -52,12 +52,9 @@ const blogsTableModule = {
         SET_OPTIONS(state, newOptions) {
             state.options = newOptions
         },
-        SET_SEARCH(state, query) {
-            state.search = query
-        }
+     
     },
     getters: {
-        //need to study
         currentPageData(state) {
             return state.cached_page[state.page] || state.items
         },
@@ -69,17 +66,18 @@ const blogsTableModule = {
         },
         itemsPerPage (state) {
             return state.itemsPerPage
-        }
+        },
     },
     actions: {
-        async fetchBlogs({ commit, state }) {
+        async fetchBlogs({ commit, state, rootState}) {
+            const query = rootState.blogs.search === null ? "" : rootState.blogs.search;
+            console.log("this is the query:", query)
             commit('SET_LOADING', true)
             console.log("This is the items perpage inside the fetchBlogs:", state.itemsPerPage)
             console.log("page:", state.page, "per_page:", state.itemsPerPage)
             try {
                 // Replace with your API call
-                const res = await api.get(`/blogs?page=${state.page}&per_page=${state.itemsPerPage}&sort_by=${state.sortBy}&sort_desc=${state.sortDesc}&search=${state.search}`);
-                
+                const res = await api.get(`/blogs?page=${state.page}&per_page=${state.itemsPerPage}&sort_by=${state.sortBy}&sort_desc=${state.sortDesc}&search=${query}`);
                 commit('SET_ITEMS', res.data.data)
                 commit('SET_TOTAL_ITEMS', res.data.total)
                 commit('CACHE_PAGE', res.data.data)

@@ -90,11 +90,20 @@ export default {
     }),
     computed: {
         ...mapGetters('blogsTable', ['optionsState', 'page', 'blogs', 'itemsPerPage' ] ),
-        ...mapState('blogsTable', [ 'headers', 'items', 'totalItems', 'loading','sortBy', 'sortDesc' ])
+        ...mapState('blogsTable', [ 'headers', 'items', 'totalItems', 'loading','sortBy', 'sortDesc' ]),
+        page: {
+            get() {
+                return this.$store.getters['blogsTable/page']
+            },
+            set(value) {
+                this.SET_SEARCH(value)
+            }
+        }
     },
     methods: {
         ...mapActions('blogsTable', ['fetchBlogs']),
-        ...mapMutations('blogsTable', ['SET_SEARCH','SET_ITEMS_PER_PAGE', 'SET_OPTIONS', 'SET_PAGE', 'SET_LAST_PAGE']),
+        ...mapMutations('blogsTable', ['SET_ITEMS_PER_PAGE', 'SET_OPTIONS', 'SET_PAGE', 'SET_LAST_PAGE']),
+        ...mapMutations('blogs', ['SET_SEARCH',]),
         handlePrevNextPage () {
             this.SET_PAGE()
         },
@@ -112,7 +121,8 @@ export default {
     watch: {
         search: _.debounce(async function (value) {
             this.SET_SEARCH(value)
-   
+
+            await this.fetchBlogs()
         }, 1000), // 1sec
     },
     mounted() {

@@ -16,7 +16,8 @@ const blogsModule = {
     itemsPerPage: 12,
     sortDesc: false,
     isEditing: false,
-    previewUrl: null
+    previewUrl: null,
+    search: '',
   },
   mutations: {
     SET_BLOGS (state, blogs) {
@@ -57,6 +58,10 @@ const blogsModule = {
     },
     SET_PREVIEWURL (state, url) {
       state.previewUrl = url
+    },
+    SET_SEARCH(state, query) {
+      console.log("this is the blogs.js:", query)
+        state.search = query
     }
  
   
@@ -79,7 +84,10 @@ const blogsModule = {
     },
     perPage: (state) => {
       return state.per_page
-    }
+    },
+    search (state) {
+        return state.search
+    },
   },
   actions: {
     setBlog({commit}, blog) {
