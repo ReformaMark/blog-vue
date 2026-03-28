@@ -76,7 +76,6 @@ export default {
         this.snackbarMessage = "Editing content"
         this.snackbarColor = "info"   // or "primary", "success", etc.
         this.snackbar = true
-        console.log(this.snackbar)
       }
       // this.showMenu = false
     }

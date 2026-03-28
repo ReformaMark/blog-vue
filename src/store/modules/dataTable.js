@@ -4,22 +4,22 @@ const blogsTableModule = {
     namespaced: true,
     state: {
         headers: [
-            { text: 'Id', value: 'id', align: 'center', width: "80px" },
-            { text: 'Title', value: 'title', align: 'center' },
-            { text: 'Content', value: 'content', align: 'center' },
-            { text: 'Actions', value: 'actions', sortable: false },
+            { text: 'Id', value: 'id', align: 'center' , width: "80px"},
+            { text: 'Image', value: 'image', align: 'center', sortable: false    },
+            { text: 'BLOG', value: 'blog', align: 'center', sortable: false},
+            { text: 'Comments', value: 'comments', align: 'center',sortable: false  },
+            { text: 'Actions', value: 'actions', width: "150px",  align: 'end', sortable: false },
 
-            // { text: 'User', value: 'user', align: 'center' }
         ],
-        items: [],               // desserts data
+        items: [],               
         totalItems: 0,   
         itemsPerPage: 15,        // total items on server
         lastPage: 1,
         page: 1,
         search: "",
         loading: false,          // loading spinner
-        sortBy: "created_at",    // column to sort by
-        sortDesc: false,         // sort direction
+        sortBy: "id",           // column to sort by
+        sortDesc: 'desc',         // sort direction
         options: {},    
         pageCache: {} // 1: [...data], 1 = page number, data = blogs which is res.data.data
     },
@@ -71,13 +71,12 @@ const blogsTableModule = {
     actions: {
         async fetchBlogs({ commit, state, rootState}) {
             const query = rootState.blogs.search === null ? "" : rootState.blogs.search;
-            console.log("this is the query:", query)
+            const sortDesc = state.options.sortDesc[0] === true ? 'desc': 'asc';
+            const itemsPerPage = state.options.itemsPerPage;
+            
             commit('SET_LOADING', true)
-            console.log("This is the items perpage inside the fetchBlogs:", state.itemsPerPage)
-            console.log("page:", state.page, "per_page:", state.itemsPerPage)
-            try {
-                // Replace with your API call
-                const res = await api.get(`/blogs?page=${state.page}&per_page=${state.itemsPerPage}&sort_by=${state.sortBy}&sort_desc=${state.sortDesc}&search=${query}`);
+            try {                // Replace with your API call
+                const res = await api.get(`/blogs?page=${state.page}&per_page=${itemsPerPage}&sort_by=${state.sortBy}&sort_desc=${sortDesc}&search=${query}`);
                 commit('SET_ITEMS', res.data.data)
                 commit('SET_TOTAL_ITEMS', res.data.total)
                 commit('CACHE_PAGE', res.data.data)

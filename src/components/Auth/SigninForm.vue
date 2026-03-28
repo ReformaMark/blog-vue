@@ -86,11 +86,7 @@ export default {
             email: this.email,
             password: this.password,
           };
-
-          console.log("Signing in with:", payload);
-
-          const result = await this.login(payload);
-          console.log("Login success:", result);
+          await this.login(payload);
           this.$router.push("/");
         } catch (error) {
           console.error("Signin error:", error);

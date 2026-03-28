@@ -74,7 +74,6 @@ router.beforeEach((to, from, next) => {
   const authPages = ['/auth']
   const user_token = JSON.parse(localStorage.getItem('user-token')) 
   const isAuthenticated = user_token != null;
-  // console.log(user)
 
   // Protect routes that require auth
   if (to.meta.requiresAuth && !isAuthenticated) {

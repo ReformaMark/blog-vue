@@ -34,9 +34,8 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
 import DeleteCommentDialog from './DeleteCommentDialog.vue';
-
-
 
 export default {
   name: 'CommentActionMenu',
@@ -49,10 +48,11 @@ export default {
   }),
   components: { DeleteCommentDialog },
   methods: {
+    ...mapMutations('comments', ['SET_EDITING_COMMENT']),
     handleMenuClick(action) {
       this.showMenu = false
       if (action === 'edit') {
-        console.log('Edit clicked')
+        this.$emit('edit', this.comment)
       }
     }
   }

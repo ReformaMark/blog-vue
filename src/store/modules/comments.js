@@ -40,7 +40,7 @@ const commentsModule = {
     INCREMENT_TOTAL (state) {
       state.pagination.total++
     },
-    SET_EDITINGCOMMENT (state, bool) {
+    SET_EDITING_COMMENT (state, bool) {
       state.editingComment = bool // true or false
     },
     UPDATE_COMMENTS (state, updatedcomment) {
@@ -97,7 +97,6 @@ const commentsModule = {
       }
     },
     async addComment({commit, state}, payload) {
-      console.log("this is the add comment payload:", payload)
         const res = await api.post('/comments', payload)
         const newComment = res.data.comment;
         if(!state.comments){
@@ -120,11 +119,17 @@ const commentsModule = {
         throw error;
       }
     },
-    async updateComment({commit}, payload) { // blog_id and comment_id in the url then content as data = payload 
+    async updateComment({commit, rootState}, payload) { // blog_id and comment_id in the url then content as data = payload 
       try {
-        const res = await api.put(`/blogs/${payload.blogId}/comments/${payload.commentId}`)
+        console.log("updatedCOntent:", payload.content)
+        const blogId = rootState.blogs.blog.id
+        const updatedCOntent = payload.content
+        console.log("This is the id:",blogId)
+        const res = await api.put(`/blogs/${blogId}/comments/${payload.commentId}`, {content: updatedCOntent})
+        
+        console.log(res.data)
         if(res.status == 200) {
-          commit('UPDATE_COMMENTS', res.data )
+          commit('UPDATE_COMMENTS', res.data.comment )
         }
       } catch (error) {
         if (error.response && error.response.status === 404) {

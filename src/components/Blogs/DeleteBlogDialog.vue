@@ -47,6 +47,9 @@ export default {
   data: () => ({
     internalDialog: false
   }),
+  computed: {
+    
+  },
   watch: {
     value(val) {
       this.internalDialog = val
@@ -54,14 +57,20 @@ export default {
   },
   methods: {
     ...mapActions('blogs', ['deleteBlog']),
+    ...mapActions('blogsTable', ['fetchBlogs']),
     closeDialog() {
       this.internalDialog = false
       this.$emit('input', false)
     },
-    confirmDelete(blogId) {
+    async confirmDelete(blogId) {
       this.deleteBlog(blogId)
       this.closeDialog()
-      this.$router.replace('/blogs')
+    
+      if(this.$route.path === "/blogs") {
+          await this.fetchBlogs()
+      }
+      
+      // this.$router.replace('/blogs')
     }
   }
 }

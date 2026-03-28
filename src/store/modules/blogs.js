@@ -18,10 +18,14 @@ const blogsModule = {
     isEditing: false,
     previewUrl: null,
     search: '',
+    selectedView: 'Card',
   },
   mutations: {
     SET_BLOGS (state, blogs) {
       state.blogs = blogs;
+    },
+    SET_SELECTED_VIEW (state, view) {
+      state.selectedView = view;
     },
     ADD_BLOG (state, blog) {
       state.blogs = [ blog, ...state.blogs];
@@ -60,7 +64,6 @@ const blogsModule = {
       state.previewUrl = url
     },
     SET_SEARCH(state, query) {
-      console.log("this is the blogs.js:", query)
         state.search = query
     }
  
@@ -88,15 +91,21 @@ const blogsModule = {
     search (state) {
         return state.search
     },
+    selectedView (state) {
+        return state.selectedView
+    },
   },
   actions: {
     setBlog({commit}, blog) {
       commit('SET_BLOG', blog)
     },
-    async fetchBlogs({commit, state}) {
+    async fetchBlogs({commit, state}, searchQuery) {
       const page = 1;
+      const query = searchQuery ?? ""
+
+      console.log(query)
       try{
-        const response = await api.get(`/blogs?page=${state.page}&per_page=${state.itemsPerPage}`);
+        const response = await api.get(`/blogs?page=${state.page}&per_page=${state.itemsPerPage}&search=${query}`);
         if (page === 1) {
           commit('SET_BLOGS', response.data.data)
         } else {
@@ -150,7 +159,6 @@ const blogsModule = {
     async updateBlog({commit}, {blogId, data}) {
       try{
         const response = await api.put(`/blogs/${blogId}`, data )
-        console.log(response.data?.blog)
         commit('UPDATE_BLOG', response.data?.blog)
       } catch (error) {
         console.error('Error removing blogs:', error)

@@ -14,10 +14,10 @@
                 v-model="title"
                 :rules="[requiredRule]"
                 color="orange"
+
                 label="Title"
                 :disabled="disable"
-                solo
-        
+                autofocus
             ></v-text-field>
             <v-textarea
                 v-model="content"
@@ -38,7 +38,7 @@
         </v-card-actions>
         <v-snackbar
             v-model="snackbar"
-            :timeout="3000"
+            :timeout="1000"
             :color="snackbarColor"
             bottom
             right
@@ -71,10 +71,10 @@ export default {
         ...mapGetters('blogs', ['blog', 'editing', 'previewUrl']),
         title: {
             get() {
-            return this.blog.title
+                return this.blog.title
             },
             set(value) {
-            this.blog.title = value
+                this.blog.title = value
             }
         },
         content: {
@@ -107,14 +107,12 @@ export default {
             const formData = new FormData()
             formData.append('image', this.file) 
             formData.append('blog_id', this.blog.id) 
-            console.log(formData)
-            // "image" is the field name your API expects
+    
             try {
                 const response = await api.post('/upload', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
+                    headers: { 'Content-Type': 'multipart/form-data' }
                 })
 
-                console.log('Upload success:', response.data)
                 const url = response.data.url
                 this.imageUrl = url
           
@@ -145,11 +143,10 @@ export default {
             }
             await this.updateBlog(payload)
             this.showSnackBar(true, "Update saved successfully.", "success" )
-            console.log("reached")
             setTimeout(() => {
                 this.setEditing(false)
                 this.disable = false
-            }, 3000)
+            }, 1000)
         }
     }
 }
