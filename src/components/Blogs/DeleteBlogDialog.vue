@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: "DeleteBlogDialog",
@@ -48,7 +48,7 @@ export default {
     internalDialog: false
   }),
   computed: {
-    
+    ...mapGetters('blogs', ['selectedView']),
   },
   watch: {
     value(val) {
@@ -56,7 +56,10 @@ export default {
     }
   },
   methods: {
+    //blogs module actions
     ...mapActions('blogs', ['deleteBlog']),
+    
+    //blogsTable module actions
     ...mapActions('blogsTable', ['fetchBlogs']),
     closeDialog() {
       this.internalDialog = false
@@ -69,8 +72,9 @@ export default {
       if(this.$route.path === "/blogs") {
           await this.fetchBlogs()
       }
-      
-      // this.$router.replace('/blogs')
+      if(this.selectedView === "Card") {
+        this.$router.replace('/blogs')
+      }
     }
   }
 }

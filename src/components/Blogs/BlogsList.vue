@@ -65,14 +65,6 @@
       <!-- BLOGS CONTENTS -->
     
       <v-row  gap="20">
-        <transition-group
-          name="stagger-slide"
-          tag="v-row"
-          class="d-flex flex-wrap"
-          :css="false"
-          @before-enter="beforeEnter"
-          @enter="enter"
-        >
           <v-col
             v-for="blog in blogs"
             :key="blog.id"
@@ -133,7 +125,6 @@
           </v-card-actions>
           </v-card>
           </v-col>
-        </transition-group>
       </v-row>
   
       <v-container class="text-center my-4">
@@ -191,6 +182,8 @@
     <div v-else-if="selectedView === 'Table'" class="">
       <blogs-table/>
     </div>
+
+    
   </div>
 </template>
 
@@ -224,14 +217,13 @@ export default {
             return this.paginationStats.current_page < this.paginationStats.last_page;
         },
         selectedView: {
-            get() {
-                return this.$store.getters['blogs/selectedView']
-            },
-            set(value) {
-                this.SET_SELECTED_VIEW(value)
-            }
+          get() {
+              return this.$store.getters['blogs/selectedView']
+          },
+          set(value) {
+              this.SET_SELECTED_VIEW(value)
+          }
         }
-
     },
     methods: {
         ...mapMutations('blogs', ['SET_SELECTED_VIEW']),

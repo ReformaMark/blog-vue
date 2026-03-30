@@ -1,7 +1,6 @@
 <template>
     <v-container class="mt-10 edit-form-container">
         <form >
-            
             <v-file-input
                 v-model="file"
                 label="Upload Image"
@@ -14,7 +13,6 @@
                 v-model="title"
                 :rules="[requiredRule]"
                 color="orange"
-
                 label="Title"
                 :disabled="disable"
                 autofocus

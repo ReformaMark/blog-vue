@@ -16,6 +16,18 @@
             </v-col>
         </v-row>
         <v-form  ref="createBlogForm" lazy-validation @submit.prevent>
+            <v-img
+                height="400"
+                :src="previewUrl || require('@/assets/default.svg')"
+                alt="blog image"
+                contain
+            ></v-img>
+            <v-file-input
+                v-model="file"
+                label="Upload Image"
+                show-size
+                solo
+            ></v-file-input>
             <v-text-field
                 v-model="title"
                 :rules="[rules.required]"
@@ -47,28 +59,63 @@
 </template>
 
 <script>
+import api from '@/services/api';
 import { mapActions } from 'vuex'
 export default {
     name: 'CreateBlogForm',
     data: () => ({
         title: '',
         content: '',
+        file: null,
+        imageUrl: "",
         rules: {
             required: v => !!v || "Required",
             validContent: v => (v && v.length > 6) || "Content must be more than 6 characters"
         },
         loading: false,
     }),
+
+    computed: {
+        previewUrl() {
+            if (this.file) {
+                console.log(this.file)
+                return URL.createObjectURL(this.file)
+            }
+            return null
+        },
+    },
     methods: {
         ...mapActions('blogs', ['createBlog']),
-        submit() {
+        async uploadFile() {
+            if (!this.file) return
+
+            const formData = new FormData()
+            formData.append('image', this.file) 
+    
+            try {
+                const response = await api.post('/upload', formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                })
+                const url = response.data.url
+                console.log('Upload successful, image URL:', url)
+                this.imageUrl = url
+            } catch (err) {
+                console.error('Upload failed:', err)
+            }
+        },
+        async submit() {
             if (this.$refs.createBlogForm.validate()) {
+                await this.uploadFile()
+
+            
                 const data = {
                     title: this.title,
                     content: this.content,
-                    image: null,
+                    image: this.imageUrl || null,
                 }
-                this.createBlog(data)
+
+                console.log('Submitting blog with data:', this.imageUrl)
+                await this.createBlog(data)
                 this.$emit('close')
                 this.$refs.createBlogForm.reset()
                 this.title = ''

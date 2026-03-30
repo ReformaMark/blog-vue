@@ -41,25 +41,27 @@
                     <v-card-text v-if="editingCommentId !== comment.id">
                         {{ comment.content }}
                     </v-card-text>
+                    <!-- Edit comment -->
+                     <v-container v-else>
+                        <v-row >
+                            <v-col>
+                                <v-text-field
+                                v-model="editingContent"
+                                label="Edit comment"
+                                />
+                            </v-col>
 
-                    <v-row v-else>
-                        <v-col>
-                            <v-text-field
-                            v-model="editingContent"
-                            label="Edit comment"
-                            />
-                        </v-col>
+                            <v-col cols="auto">
+                                <v-btn small color="primary" @click="saveEdit(comment)">
+                                Save
+                                </v-btn>
 
-                        <v-col cols="auto">
-                            <v-btn small color="primary" @click="saveEdit(comment)">
-                            Save
-                            </v-btn>
-
-                            <v-btn small text @click="cancelEdit">
-                            Cancel
-                            </v-btn>
-                        </v-col>
-                    </v-row>
+                                <v-btn small text @click="cancelEdit">
+                                Cancel
+                                </v-btn>
+                            </v-col>
+                        </v-row>
+                    </v-container>
                 </div>
                 <div v-if="comment.deleted" class="">
                     <v-card-title class="d-flex justify-space-between align-center">

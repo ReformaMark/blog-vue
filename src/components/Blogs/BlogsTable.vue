@@ -30,6 +30,7 @@
         :page.sync="page"
         :server-items-length="totalItems"
         :loading="loading"
+        :sort-desc="[true]"
         loading-text="Loading blogs..."
         fixed-header
         height="calc(100vh - 40vh)"
@@ -174,6 +175,7 @@ export default {
     },
     computed: {
         ...mapGetters('blogsTable', ['optionsState', 'page', 'blogs', 'itemsPerPage' ] ),
+        // ...mapGetters('blogs', ['blog' ] ),
         ...mapGetters('user', ['getUser'] ),
         ...mapState('blogsTable', [ 'headers', 'items', 'totalItems', 'loading','sortBy', 'sortDesc' ]),
         page: {
@@ -182,13 +184,18 @@ export default {
             },
             set(value) {
                 this.SET_PAGE(value)
+
+                
             }
         }
     },
     methods: {
+        //blogsTable 
         ...mapActions('blogsTable', ['fetchBlogs']),
         ...mapMutations('blogsTable', ['SET_ITEMS_PER_PAGE', 'SET_OPTIONS', 'SET_PAGE', 'SET_LAST_PAGE']),
-        ...mapMutations('blogs', ['SET_SEARCH',]),
+        
+        //blogs
+        ...mapMutations('blogs', ['SET_SEARCH', 'SET_BLOG']),
         handlePrevNextPage () {
             this.SET_PAGE()
         },
@@ -206,6 +213,8 @@ export default {
             this.showDeleteDialog = true
         },
         seeItem(item) {
+            this.SET_BLOG(item)
+
             this.$router.push(`/blogs/${item.id}`)
         },
         formatDate(date){

@@ -11,8 +11,7 @@
             </v-icon>
             <span class="font-weight-medium" style="color: #1976D2;">Back</span>
         </v-btn>
-        <v-container>
-        
+        <v-container  class="mt-5">
             <!-- Image -->
             <v-card
                 transition="scale-transition"
@@ -64,11 +63,6 @@
                 <div v-else class="">
                     <edit-blog-form/>
                 </div>
-                    
-                    <v-card-title class="text-h2">
-                        
-                    </v-card-title>
-        
             </div>
             <!-- Comment Section... Hidden when editing is true -->
             <v-card v-if="!editing && blog">
@@ -107,11 +101,9 @@ export default {
         ...mapGetters('user', ['getUser']),
     },
     mounted() {
-        this.setEditing(false)
-        if(this.blog === null) {
+         this.setEditing(false)
+        if(this.blog === null || this.blog.id !== parseInt(this.$route.params.id)) {
             this.fetchBlog(this.$route.params.id)
-       
-            
         }
     },
     methods: {
@@ -127,16 +119,13 @@ export default {
         handleBackButton() {
             this.$router.back()
         }
-      
-   
     },
     components: {
         BlogActionMenu,
         CommentInput,
         CommentSection,
         EditBlogForm,
-    }
-
+    },
 }
 </script>
 

@@ -102,10 +102,14 @@ const blogsModule = {
     async fetchBlogs({commit, state}, searchQuery) {
       const page = 1;
       const query = searchQuery ?? ""
-
-      console.log(query)
       try{
-        const response = await api.get(`/blogs?page=${state.page}&per_page=${state.itemsPerPage}&search=${query}`);
+
+        const params = {
+          page: state.page,
+          per_page: state.itemsPerPage,
+          search: query
+        }
+        const response = await api.get(`/blogs`, { params });
         if (page === 1) {
           commit('SET_BLOGS', response.data.data)
         } else {
@@ -137,10 +141,18 @@ const blogsModule = {
         commit('SET_PAGINATION', paginationStats);
       }
     },
-    async createBlog({commit}, inputData) {
+    async createBlog({commit, dispatch}, inputData) {
       try{
         const response = await api.post('/blogs', inputData)
         commit('ADD_BLOG', response.data?.blog)
+        commit('blogsTable/APPEND_BLOG', response.data?.blog, { root: true })
+        
+        dispatch('showSnackbar', {
+          message: "Blog created successfully",
+          color: "success"
+        }, { root: true })
+
+
       } catch (error) {
         console.error('Error creating blogs:', error)
         throw error

@@ -6,10 +6,9 @@ const blogsTableModule = {
         headers: [
             { text: 'Id', value: 'id', align: 'center' , width: "80px"},
             { text: 'Image', value: 'image', align: 'center', sortable: false    },
-            { text: 'BLOG', value: 'blog', align: 'center', sortable: false},
+            { text: 'BLOG', value: 'blog', align: 'center',  width: "1000px",sortable: false},
             { text: 'Comments', value: 'comments', align: 'center',sortable: false  },
             { text: 'Actions', value: 'actions', width: "150px",  align: 'end', sortable: false },
-
         ],
         items: [],               
         totalItems: 0,   
@@ -36,9 +35,6 @@ const blogsTableModule = {
         SET_PAGE(state, page) {
             state.page = page
         },
-        SET_ITEMS_PER_PAGE(state, count) {
-            state.itemsPerPage = count
-        },
         SET_SORT(state, { sortBy, sortDesc }) {
             state.sortBy = sortBy
             state.sortDesc = sortDesc
@@ -52,20 +48,22 @@ const blogsTableModule = {
         SET_OPTIONS(state, newOptions) {
             state.options = newOptions
         },
+        APPEND_BLOG(state, blog) {
+            console.log('Appending blog:', blog)
+            if(state.options.sortDesc[0] === true) {
+                state.items.unshift(blog)
+            } else {
+                state.items.push(blog)
+            }
+        }
      
     },
     getters: {
-        currentPageData(state) {
-            return state.cached_page[state.page] || state.items
-        },
         optionsState(state) {
             return state.options
         },
         blogs (state) {
-            return state.items
-        },
-        itemsPerPage (state) {
-            return state.itemsPerPage
+            return state.items // this is the blogs data for the current page
         },
     },
     actions: {
@@ -73,10 +71,17 @@ const blogsTableModule = {
             const query = rootState.blogs.search === null ? "" : rootState.blogs.search;
             const sortDesc = state.options.sortDesc[0] === true ? 'desc': 'asc';
             const itemsPerPage = state.options.itemsPerPage;
-            
+            const params = {
+                page: state.page,
+                per_page: itemsPerPage,
+                sort_by: state.sortBy,
+                sort_desc: sortDesc,
+                search: query
+            }
             commit('SET_LOADING', true)
             try {                // Replace with your API call
-                const res = await api.get(`/blogs?page=${state.page}&per_page=${itemsPerPage}&sort_by=${state.sortBy}&sort_desc=${sortDesc}&search=${query}`);
+                const res = await api.get('/blogs', {params});
+     
                 commit('SET_ITEMS', res.data.data)
                 commit('SET_TOTAL_ITEMS', res.data.total)
                 commit('CACHE_PAGE', res.data.data)
