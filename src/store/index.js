@@ -6,6 +6,7 @@ import blogsModule from './modules/blogs'
 import commentsModule from './modules/comments'
 import blogsTableModule from './modules/dataTable'
 import snackbarModule from './modules/snackbar'
+import drawerModule from './modules/drawer'
 
 Vue.use(Vuex)
 
@@ -16,6 +17,7 @@ export default new Vuex.Store({
     blogs: blogsModule,
     comments: commentsModule,
     blogsTable: blogsTableModule,
-    snackbarModule
+    snackbarModule,
+    drawerModule
   }
 })

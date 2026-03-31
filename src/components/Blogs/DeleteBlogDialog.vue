@@ -58,7 +58,7 @@ export default {
   methods: {
     //blogs module actions
     ...mapActions('blogs', ['deleteBlog']),
-    
+
     //blogsTable module actions
     ...mapActions('blogsTable', ['fetchBlogs']),
     closeDialog() {

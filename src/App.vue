@@ -2,6 +2,7 @@
   <component :is="layout">
     <router-view />
     <app-snackbar/>
+    
   </component>
 </template>
 
